@@ -3,11 +3,12 @@ include(FetchContent)
 
 project(
     AnykaDoorbell
-    VERSION 1.0
+    VERSION 0.1
     DESCRIPTION "Custom firmware for Anyka 3760D doorbell"
     LANGUAGES C CXX
 )
 
+# Toolchain setup
 set(CMAKE_SYSTEM_NAME Linux)
 set(CMAKE_SYSTEM_PROCESSOR arm)
 
@@ -20,14 +21,13 @@ set(CMAKE_C_COMPILER   ${TOOLCHAIN_ROOT}/bin/arm-anykav500-linux-uclibcgnueabi-g
 set(CMAKE_CXX_COMPILER ${TOOLCHAIN_ROOT}/bin/arm-anykav500-linux-uclibcgnueabi-g++)
 set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)
 
-set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_C_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 
+# Fetch LVGL v7 dependencies
 set(LV_CONF_PATH ${CMAKE_CURRENT_SOURCE_DIR}/src/lv_conf.h)
 
-# --------------------------------------------------------------------------------
-# 🔽 Fetch LVGL
-# --------------------------------------------------------------------------------
+# Fetch LVGL
 FetchContent_Declare(
     lvgl
     GIT_REPOSITORY https://github.com/lvgl/lvgl.git
@@ -52,53 +52,32 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(lv_examples)
 
-# --------------------------------------------------------------------------------
-# 📁 Collect all source files
-# --------------------------------------------------------------------------------
-file(GLOB_RECURSE PROJECT_SOURCES
-    src/*.cpp
-    src/*.c
-)
+# Collect all source files
+file(GLOB_RECURSE PROJECT_SOURCES src/*.cpp src/*.c)
+file(GLOB_RECURSE LVGL_CORE_SOURCES ${lvgl_SOURCE_DIR}/src/*.c)
+file(GLOB_RECURSE LVGL_DRIVER_SOURCES ${lv_drivers_SOURCE_DIR}/*.c)
+file(GLOB_RECURSE LVGL_EXAMPLES_SOURCES ${lv_examples_SOURCE_DIR}/*.c)
 
-file(GLOB_RECURSE LVGL_CORE_SOURCES
-    ${lvgl_SOURCE_DIR}/src/*.c
-)
-
-file(GLOB_RECURSE LVGL_DRIVER_SOURCES
-    ${lv_drivers_SOURCE_DIR}/*.c
-)
-
-file(GLOB_RECURSE LVGL_EXAMPLES_SOURCES
-    ${lv_examples_SOURCE_DIR}/*.c
-)
-
-# --------------------------------------------------------------------------------
-# 🔧 Define executable
-# --------------------------------------------------------------------------------
+# Define executable
 add_executable(ak_doorbell
     ${PROJECT_SOURCES}
     ${LVGL_CORE_SOURCES}
     ${LVGL_DRIVER_SOURCES}
     ${LVGL_EXAMPLES_SOURCES}
 )
+target_link_options(ak_doorbell PRIVATE -static)
+set_target_properties(ak_doorbell PROPERTIES LINK_SEARCH_START_STATIC TRUE LINK_SEARCH_END_STATIC TRUE)
 
-# --------------------------------------------------------------------------------
-# 📦 Include directories
-# --------------------------------------------------------------------------------
+# Include directories
 target_include_directories(ak_doorbell PRIVATE
-    src                  # contains lv_conf.h
+    src # contains lv_conf.h
     ${lvgl_SOURCE_DIR}/src
-    ${lvgl_SOURCE_DIR}/..
+    ${lvgl_SOURCE_DIR}/.. # needed by lv_drivers as it ignores absolute path to conf file
     ${lv_drivers_SOURCE_DIR}
     ${lv_examples_SOURCE_DIR}
 )
 
-# --------------------------------------------------------------------------------
-# ✅ Compile definitions
-# --------------------------------------------------------------------------------
 target_compile_definitions(ak_doorbell PRIVATE
-    LV_CONF_INCLUDE_SIMPLE=1
-    LV_EX_CONF_INCLUDE_SIMPLE=1
+    LV_CONF_INCLUDE_SIMPLE=1 # for lv_drivers
+    LV_EX_CONF_INCLUDE_SIMPLE=1 # for lv_examples
 )
-
-
