@@ -8,6 +8,18 @@ project(
     LANGUAGES C CXX
 )
 
+set(CMAKE_SYSTEM_NAME Linux)
+set(CMAKE_SYSTEM_PROCESSOR arm)
+
+set(TOOLCHAIN_ROOT "$ENV{TOOLCHAIN_ROOT}")
+if(NOT EXISTS "${TOOLCHAIN_ROOT}/bin/arm-anykav500-linux-uclibcgnueabi-gcc")
+	message(FATAL_ERROR "TOOLCHAIN_ROOT is invalid or compiler not found in ${TOOLCHAIN_ROOT}/bin")
+endif()
+
+set(CMAKE_C_COMPILER   ${TOOLCHAIN_ROOT}/bin/arm-anykav500-linux-uclibcgnueabi-gcc)
+set(CMAKE_CXX_COMPILER ${TOOLCHAIN_ROOT}/bin/arm-anykav500-linux-uclibcgnueabi-g++)
+set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)
+
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_C_STANDARD 11)
 
@@ -23,6 +35,8 @@ FetchContent_Declare(
     SOURCE_DIR ${CMAKE_BINARY_DIR}/_deps/lvgl
 )
 FetchContent_MakeAvailable(lvgl)
+target_compile_definitions(lvgl PRIVATE LV_CONF_INCLUDE_SIMPLE=1)
+target_include_directories(lvgl PRIVATE ${CMAKE_SOURCE_DIR}/src)
 
 FetchContent_Declare(
     lv_drivers
@@ -84,6 +98,7 @@ target_include_directories(ak_doorbell PRIVATE
 # --------------------------------------------------------------------------------
 target_compile_definitions(ak_doorbell PRIVATE
     LV_CONF_INCLUDE_SIMPLE=1
+    LV_EX_CONF_INCLUDE_SIMPLE=1
 )
 
 
