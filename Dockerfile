@@ -1,7 +1,9 @@
 FROM --platform=linux/amd64 ubuntu:22.04
 
 # Install dependencies
+RUN dpkg --add-architecture i386
 RUN apt-get update
+
 RUN apt-get install -y \
     build-essential \
     cmake \
@@ -12,10 +14,10 @@ RUN apt-get install -y \
     libjpeg-dev \
     libudev-dev \
     libinput-dev \
-    bzip2
+    bzip2 \
+    file \
+    vim
 
-RUN dpkg --add-architecture i386
-RUN apt-get update
 RUN apt-get install -y \
     libstdc++6:i386 \
     lib32stdc++6 \
@@ -24,6 +26,7 @@ RUN apt-get install -y \
 
 RUN apt-get clean
 
+# Fix: mpfr link
 RUN ln -s /lib/x86_64-linux-gnu/libmpfr.so.6 /lib/x86_64-linux-gnu/libmpfr.so.4
 
 # Install anyka gcc toolchain
