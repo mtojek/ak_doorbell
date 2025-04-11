@@ -57,16 +57,26 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(lv_examples)
 
 # Collect all source files
-file(GLOB_RECURSE PROJECT_SOURCES src/*.cpp src/*.c)
+file(GLOB_RECURSE PROJECT_SOURCES
+    src/*.cpp
+    src/lv_port/*.cpp
+    src/log/*.cpp
+    src/hw/*.cpp
+)
 file(GLOB_RECURSE LVGL_CORE_SOURCES ${lvgl_SOURCE_DIR}/src/*.c)
-file(GLOB_RECURSE LVGL_DRIVER_SOURCES ${lv_drivers_SOURCE_DIR}/*.c)
-file(GLOB_RECURSE LVGL_EXAMPLES_SOURCES ${lv_examples_SOURCE_DIR}/*.c)
+file(GLOB_RECURSE LVGL_DRIVERS_SOURCES
+    ${lv_drivers_SOURCE_DIR}/display/fbdev.c
+    ${lv_drivers_SOURCE_DIR}/indev/evdev.c
+)
+file(GLOB_RECURSE LVGL_EXAMPLES_SOURCES
+    ${lv_examples_SOURCE_DIR}/src/lv_demo_widgets/*.c
+)
 
 # Define executable
 add_executable(ak_doorbell
     ${PROJECT_SOURCES}
     ${LVGL_CORE_SOURCES}
-    ${LVGL_DRIVER_SOURCES}
+    ${LVGL_DRIVERS_SOURCES}
     ${LVGL_EXAMPLES_SOURCES}
 )
 target_link_options(ak_doorbell PRIVATE -static)
@@ -79,8 +89,6 @@ target_include_directories(ak_doorbell PRIVATE
     ${lvgl_SOURCE_DIR}/.. # needed by lv_drivers as it ignores absolute path to conf file
     ${lv_drivers_SOURCE_DIR}
     ${lv_examples_SOURCE_DIR}
-
-    src/lv_port
 )
 
 target_compile_definitions(ak_doorbell PRIVATE

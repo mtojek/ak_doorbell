@@ -2,6 +2,7 @@
 #include <csignal>
 #include <unistd.h>
 
+#include "hw/display.hpp"
 #include "log/logger.hpp"
 #include "lv_examples/lv_examples.h"
 #include "lv_port/port_init.hpp"
@@ -16,6 +17,9 @@ void on_signal(int signal) {
 int main() {
   log::set_level(log::Level::DEBUG);
   log::info("main", "Start application");
+
+  display::init();
+  display::enable(true);
 
   std::signal(SIGINT, on_signal);
   std::signal(SIGTERM, on_signal);
@@ -32,6 +36,7 @@ int main() {
   }
 
   log::info("main", "Shutting down...");
+  display::enable(false);
 
   return 0;
 }

@@ -2,7 +2,6 @@
 
 namespace log {
 
-namespace {
 Level current_level = Level::INFO;
 
 const char *level_to_string(Level level) {
@@ -29,7 +28,6 @@ std::string timestamp() {
   std::strftime(buf, sizeof(buf), "%Y-%m-%d %H:%M:%S", &tm);
   return std::string(buf);
 }
-} // namespace
 
 void set_level(Level level) { current_level = level; }
 
