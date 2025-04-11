@@ -22,7 +22,9 @@ set(CMAKE_CXX_COMPILER ${TOOLCHAIN_ROOT}/bin/arm-anykav500-linux-uclibcgnueabi-g
 set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)
 
 set(CMAKE_C_STANDARD 11)
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)            
 
 # Fetch LVGL v7 dependencies
 set(LV_CONF_PATH ${CMAKE_CURRENT_SOURCE_DIR}/src/lv_conf.h)
@@ -42,6 +44,7 @@ FetchContent_Declare(
     lv_drivers
     GIT_REPOSITORY https://github.com/lvgl/lv_drivers.git
     GIT_TAG v7.11.0
+    SOURCE_DIR ${CMAKE_BINARY_DIR}/_deps/lv_drivers
 )
 FetchContent_MakeAvailable(lv_drivers)
 
@@ -49,6 +52,7 @@ FetchContent_Declare(
     lv_examples
     GIT_REPOSITORY https://github.com/lvgl/lv_examples.git
     GIT_TAG v7.11.0
+    SOURCE_DIR ${CMAKE_BINARY_DIR}/_deps/lv_examples
 )
 FetchContent_MakeAvailable(lv_examples)
 
@@ -75,6 +79,8 @@ target_include_directories(ak_doorbell PRIVATE
     ${lvgl_SOURCE_DIR}/.. # needed by lv_drivers as it ignores absolute path to conf file
     ${lv_drivers_SOURCE_DIR}
     ${lv_examples_SOURCE_DIR}
+
+    src/lv_port
 )
 
 target_compile_definitions(ak_doorbell PRIVATE
