@@ -5,7 +5,7 @@
 #include "input.hpp"
 
 void lv_port_init() {
-  spdlog::debug("Initialize LVGL port.");
+  log::debug("lv_port_init", "Initialize LVGL port.");
 
   lv_init();
 
@@ -13,5 +13,5 @@ void lv_port_init() {
   lv_port_input_init();
   lv_port_disp_init();
 
-  spdlog::debug("LVGL port initialized.");
+  log::debug("lv_port_init", "LVGL port initialized.");
 }

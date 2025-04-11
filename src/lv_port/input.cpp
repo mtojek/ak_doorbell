@@ -1,7 +1,7 @@
 #include "input.hpp"
 
 void lv_port_input_init() {
-  spdlog::debug("Initialize touch input.");
+  log::debug("lv_port_input_init", "Initialize touch input.");
 
   evdev_init();
 
@@ -11,5 +11,5 @@ void lv_port_input_init() {
   indev_drv.read_cb = evdev_read; // Use evdev for touch input
   lv_indev_drv_register(&indev_drv);
 
-  spdlog::debug("Input initialized.");
+  log::debug("lv_port_input_init", "Touch input initialized.");
 }

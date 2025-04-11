@@ -1,7 +1,7 @@
 #include "display.hpp"
 
 void lv_port_disp_init() {
-  spdlog::debug("Initialize display.");
+  log::debug("lv_port_disp_init", "Initialize display.");
 
   fbdev_init();
 
@@ -12,5 +12,5 @@ void lv_port_disp_init() {
   disp_drv.flush_cb = fbdev_flush;
   lv_disp_drv_register(&disp_drv);
 
-  spdlog::debug("Display initialized.");
+  log::debug("lv_port_disp_init", "Display initialized.");
 }

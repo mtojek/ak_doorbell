@@ -26,20 +26,6 @@ project(
     LANGUAGES C CXX
 )
 
-# Fetch spdlog
-set(SPDLOG_FMT_EXTERNAL OFF)            # Use embedded fmt
-set(SPDLOG_BUILD_SHARED OFF)            # No .so or .dll
-set(SPDLOG_BUILD_STATIC ON)             # Statically built if needed
-set(SPDLOG_NO_EXCEPTIONS ON)            # Optional: avoid C++ exceptions
-set(SPDLOG_DISABLE_DEFAULT_LOGGER ON)   # Optional: use your own logger instance
-
-FetchContent_Declare(
-    spdlog
-    GIT_REPOSITORY https://github.com/gabime/spdlog.git
-    GIT_TAG v1.12.0
-)
-FetchContent_MakeAvailable(spdlog)
-
 # Fetch LVGL v7 dependencies
 set(LV_CONF_PATH ${CMAKE_CURRENT_SOURCE_DIR}/src/lv_conf.h)
 
@@ -101,5 +87,3 @@ target_compile_definitions(ak_doorbell PRIVATE
     LV_CONF_INCLUDE_SIMPLE=1 # for lv_drivers
     LV_EX_CONF_INCLUDE_SIMPLE=1 # for lv_examples
 )
-
-target_link_libraries(ak_doorbell PRIVATE spdlog::spdlog)

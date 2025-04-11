@@ -1,6 +1,6 @@
 #pragma once
 
-#include "spdlog/spdlog.h"
+#include "log/logger.hpp"
 
 #include "lvgl/lvgl.h"
 
