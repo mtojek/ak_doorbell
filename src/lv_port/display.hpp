@@ -1,5 +1,7 @@
 #pragma once
 
+#include "spdlog/spdlog.h"
+
 #include "lvgl/lvgl.h"
 
 #include "lv_drivers/display/fbdev.h"
