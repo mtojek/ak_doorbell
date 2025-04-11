@@ -1,10 +1,15 @@
 #include <unistd.h>
 
+#include "spdlog/spdlog.h"
+
 #include "lv_port/port_init.hpp"
 
 #include "lv_examples/lv_examples.h"
 
 int main() {
+  spdlog::set_level(spdlog::level::debug);
+  spdlog::info("LVGL initialized");
+
   lv_port_init();
 
   lv_demo_widgets();
