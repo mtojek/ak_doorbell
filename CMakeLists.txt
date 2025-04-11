@@ -1,13 +1,6 @@
 cmake_minimum_required(VERSION 3.15)
 include(FetchContent)
 
-project(
-    AnykaDoorbell
-    VERSION 0.1
-    DESCRIPTION "Custom firmware for Anyka 3760D doorbell"
-    LANGUAGES C CXX
-)
-
 # Toolchain setup
 set(CMAKE_SYSTEM_NAME Linux)
 set(CMAKE_SYSTEM_PROCESSOR arm)
@@ -24,7 +17,14 @@ set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)            
+set(CMAKE_CXX_EXTENSIONS OFF)
+
+project(
+    AnykaDoorbell
+    VERSION 0.1
+    DESCRIPTION "Custom firmware for Anyka 3760D doorbell"
+    LANGUAGES C CXX
+)
 
 # Fetch LVGL v7 dependencies
 set(LV_CONF_PATH ${CMAKE_CURRENT_SOURCE_DIR}/src/lv_conf.h)
