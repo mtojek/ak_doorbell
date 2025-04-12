@@ -1,0 +1,67 @@
+diff --git a/display/fbdev.c b/display/fbdev.c
+index d391ce8..ea45316 100644
+--- a/display/fbdev.c
++++ b/display/fbdev.c
+@@ -90,6 +90,12 @@ void fbdev_init(void)
+     }
+     printf("The framebuffer device was opened successfully.\n");
+ 
++    // Make sure that the display is on.
++    if (ioctl(fbfd, FBIOBLANK, FB_BLANK_UNBLANK) != 0) {
++        perror("ioctl(FBIOBLANK)");
++        // Don't return. Some framebuffer drivers like efifb or simplefb don't implement FBIOBLANK.
++    }
++
+ #if USE_BSD_FBDEV
+     struct fbtype fb;
+     unsigned line_length;
+@@ -179,8 +185,8 @@ void fbdev_flush(lv_disp_drv_t * drv, const lv_area_t * area, lv_color_t * color
+     long int byte_location = 0;
+     unsigned char bit_location = 0;
+ 
+-    /*32 or 24 bit per pixel*/
+-    if(vinfo.bits_per_pixel == 32 || vinfo.bits_per_pixel == 24) {
++    /*32 bit per pixel*/
++    if(vinfo.bits_per_pixel == 32) {
+         uint32_t * fbp32 = (uint32_t *)fbp;
+         int32_t y;
+         for(y = act_y1; y <= act_y2; y++) {
+@@ -189,6 +195,23 @@ void fbdev_flush(lv_disp_drv_t * drv, const lv_area_t * area, lv_color_t * color
+             color_p += w;
+         }
+     }
++    /*24 bit per pixel*/
++    else if(vinfo.bits_per_pixel == 24 && LV_COLOR_DEPTH == 32) {
++        uint8_t * fbp8 = (uint8_t *)fbp;
++        lv_coord_t x;
++        int32_t y;
++        uint8_t *pixel;
++        for(y = act_y1; y <= act_y2; y++) {
++            location = (act_x1 + vinfo.xoffset) + (y + vinfo.yoffset) * finfo.line_length / 3;
++            for (x = 0; x < w; ++x) {
++                pixel = (uint8_t *)(&color_p[x]);
++                fbp8[3 * (location + x)] = pixel[2];
++                fbp8[3 * (location + x) + 1] = pixel[1];
++                fbp8[3 * (location + x) + 2] = pixel[0];
++            }
++            color_p += w;
++        }
++    }
+     /*16 bit per pixel*/
+     else if(vinfo.bits_per_pixel == 16) {
+         uint16_t * fbp16 = (uint16_t *)fbp;
+diff --git a/indev/evdev.c b/indev/evdev.c
+index ab1dc6f..b874f1c 100644
+--- a/indev/evdev.c
++++ b/indev/evdev.c
+@@ -158,6 +158,10 @@ bool evdev_read(lv_indev_drv_t * drv, lv_indev_data_t * data)
+                                 #else
+                                         evdev_root_y = in.value;
+                                 #endif
++            else if (in.code == 47 && in.value == 1)
++                    evdev_button = LV_INDEV_STATE_PR;
++            else if (in.code == 47 && in.value == 10)
++                    evdev_button = LV_INDEV_STATE_REL;
+         } else if(in.type == EV_KEY) {
+             if(in.code == BTN_MOUSE || in.code == BTN_TOUCH) {
+                 if(in.value == 0)

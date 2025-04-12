@@ -45,6 +45,7 @@ FetchContent_Declare(
     GIT_REPOSITORY https://github.com/lvgl/lv_drivers.git
     GIT_TAG v7.11.0
     SOURCE_DIR ${CMAKE_BINARY_DIR}/_deps/lv_drivers
+    PATCH_COMMAND patch -p1 < ${CMAKE_SOURCE_DIR}/patches/lv_drivers.patch
 )
 FetchContent_MakeAvailable(lv_drivers)
 
