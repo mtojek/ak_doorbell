@@ -18,20 +18,17 @@ int main() {
   log::set_level(log::Level::DEBUG);
   log::info("main", "Start application");
 
-  display::init();
-  display::enable(true);
+  lv_port_init();
+  lv_demo_widgets();
 
+  display::init();
   std::signal(SIGINT, on_signal);
   std::signal(SIGTERM, on_signal);
-
-  lv_port_init();
-
-  lv_demo_widgets();
+  display::enable(true);
 
   while (app_running) {
     lv_tick_inc(5);
     lv_task_handler();
-
     usleep(5000); // FIXME ak_sdk_init + ak_sleep_ms
   }
 

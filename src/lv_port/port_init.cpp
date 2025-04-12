@@ -9,9 +9,9 @@ void lv_port_init() {
 
   lv_init();
 
-  lv_port_tick_init();
-  lv_port_input_init();
   lv_port_disp_init();
+  lv_port_input_init();
+  lv_port_tick_init();
 
   log::debug("lv_port_init", "LVGL port initialized.");
 }
