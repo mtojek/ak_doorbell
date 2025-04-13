@@ -15,7 +15,7 @@ build/
 *.pch
 
 # Compiled Dynamic libraries
-*.so
+#*.so
 *.dylib
 *.dll
 
@@ -26,7 +26,7 @@ build/
 # Compiled Static libraries
 *.lai
 *.la
-*.a
+#*.a
 *.lib
 
 # Executables
