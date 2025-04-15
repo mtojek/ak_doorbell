@@ -1,21 +1,42 @@
 diff --git a/display/fbdev.c b/display/fbdev.c
-index d391ce8..ea45316 100644
+index d391ce8..e30dfe8 100644
 --- a/display/fbdev.c
 +++ b/display/fbdev.c
-@@ -90,6 +90,12 @@ void fbdev_init(void)
+@@ -128,17 +128,31 @@ void fbdev_init(void)
      }
-     printf("The framebuffer device was opened successfully.\n");
+ #endif /* USE_BSD_FBDEV */
  
-+    // Make sure that the display is on.
-+    if (ioctl(fbfd, FBIOBLANK, FB_BLANK_UNBLANK) != 0) {
-+        perror("ioctl(FBIOBLANK)");
-+        // Don't return. Some framebuffer drivers like efifb or simplefb don't implement FBIOBLANK.
+-    printf("%dx%d, %dbpp\n", vinfo.xres, vinfo.yres, vinfo.bits_per_pixel);
+-
+     // Figure out the size of the screen in bytes
+     screensize =  finfo.smem_len; //finfo.line_length * vinfo.yres;    
+ 
++    printf("%dx%d, %dbpp, screensize: %lu\n", vinfo.xres, vinfo.yres, vinfo.bits_per_pixel, screensize);
++
+     // Map the device to memory
+     fbp = (char *)mmap(0, screensize, PROT_READ | PROT_WRITE, MAP_SHARED, fbfd, 0);
+     if((intptr_t)fbp == -1) {
+         perror("Error: failed to map framebuffer device to memory");
+         return;
+     }
++
++    // Force framebuffer refresh now
++    vinfo.activate |= FB_ACTIVATE_FORCE;
++    vinfo.activate |= FB_ACTIVATE_NOW;
++
++    // Select the first part of framebuffer
++    vinfo.reserved[0] = 0;
++
++    // Update variable screen information
++    if (ioctl(fbfd, FBIOPUT_VSCREENINFO, &vinfo) < 0) {
++        perror("Error writing variable information");
++        return;
 +    }
 +
- #if USE_BSD_FBDEV
-     struct fbtype fb;
-     unsigned line_length;
-@@ -179,8 +185,8 @@ void fbdev_flush(lv_disp_drv_t * drv, const lv_area_t * area, lv_color_t * color
+     memset(fbp, 0, screensize);
+ 
+     printf("The framebuffer device was mapped to memory successfully.\n");
+@@ -179,8 +193,8 @@ void fbdev_flush(lv_disp_drv_t * drv, const lv_area_t * area, lv_color_t * color
      long int byte_location = 0;
      unsigned char bit_location = 0;
  
@@ -26,7 +47,7 @@ index d391ce8..ea45316 100644
          uint32_t * fbp32 = (uint32_t *)fbp;
          int32_t y;
          for(y = act_y1; y <= act_y2; y++) {
-@@ -189,6 +195,23 @@ void fbdev_flush(lv_disp_drv_t * drv, const lv_area_t * area, lv_color_t * color
+@@ -189,6 +203,23 @@ void fbdev_flush(lv_disp_drv_t * drv, const lv_area_t * area, lv_color_t * color
              color_p += w;
          }
      }
