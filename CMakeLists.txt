@@ -104,5 +104,13 @@ target_compile_definitions(ak_doorbell PRIVATE
 )
 
 target_link_libraries(ak_doorbell PRIVATE
-    plat_tde
+    -Wl,--start-group
+    libplat_common.a
+    libplat_dbg.a
+    libplat_log.a
+    libplat_mem.a
+    libplat_osal.a
+    libplat_tde.a
+    libplat_thread.a
+    -Wl,--end-group
 )

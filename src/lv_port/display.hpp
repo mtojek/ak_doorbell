@@ -9,6 +9,8 @@
 extern "C" {
 #include "anyka/ak_common.h"
 #include "anyka/ak_common_graphics.h"
+#include "anyka/ak_log.h"
+#include "anyka/ak_mem.h"
 #include "anyka/ak_tde.h"
 }
 
