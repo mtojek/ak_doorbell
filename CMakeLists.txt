@@ -73,6 +73,10 @@ file(GLOB_RECURSE LVGL_EXAMPLES_SOURCES
     ${lv_examples_SOURCE_DIR}/src/lv_demo_widgets/*.c
 )
 
+# Include Anyka SDK
+include_directories(${CMAKE_SOURCE_DIR}/include)
+link_directories(${CMAKE_SOURCE_DIR}/lib)
+
 # Define executable
 add_executable(ak_doorbell
     ${PROJECT_SOURCES}
@@ -80,6 +84,8 @@ add_executable(ak_doorbell
     ${LVGL_DRIVERS_SOURCES}
     ${LVGL_EXAMPLES_SOURCES}
 )
+
+# Link static
 target_link_options(ak_doorbell PRIVATE -static)
 set_target_properties(ak_doorbell PROPERTIES LINK_SEARCH_START_STATIC TRUE LINK_SEARCH_END_STATIC TRUE)
 
@@ -95,4 +101,8 @@ target_include_directories(ak_doorbell PRIVATE
 target_compile_definitions(ak_doorbell PRIVATE
     LV_CONF_INCLUDE_SIMPLE=1 # for lv_drivers
     LV_EX_CONF_INCLUDE_SIMPLE=1 # for lv_examples
+)
+
+target_link_libraries(ak_doorbell PRIVATE
+    plat_tde
 )
