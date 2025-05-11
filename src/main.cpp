@@ -4,8 +4,10 @@
 
 #include "hw/display.hpp"
 #include "log/logger.hpp"
-#include "lv_examples/lv_examples.h"
 #include "lv_port/port_init.hpp"
+
+#include "lv_examples/lv_examples.h"
+#include "ui/ui.hpp"
 
 std::atomic<bool> app_running(true);
 
@@ -20,6 +22,7 @@ int main() {
 
   lv_port_init();
   lv_demo_widgets();
+  // ui::welcome();
 
   display::init();
   std::signal(SIGINT, on_signal);

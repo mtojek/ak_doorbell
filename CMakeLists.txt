@@ -63,6 +63,7 @@ file(GLOB_RECURSE PROJECT_SOURCES
     src/lv_port/*.cpp
     src/log/*.cpp
     src/hw/*.cpp
+    src/ui/*.cpp
 )
 file(GLOB_RECURSE LVGL_CORE_SOURCES ${lvgl_SOURCE_DIR}/src/*.c)
 file(GLOB_RECURSE LVGL_DRIVERS_SOURCES
