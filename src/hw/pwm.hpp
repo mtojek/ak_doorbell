@@ -2,6 +2,8 @@
 
 #include <string>
 
+namespace hw {
+
 class PWM {
 public:
   PWM(int chip, int channel);
@@ -19,3 +21,5 @@ private:
   int chip_;
   int channel_;
 };
+
+} // namespace hw

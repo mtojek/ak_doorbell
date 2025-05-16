@@ -1,5 +1,8 @@
 #pragma once
 
 namespace ui {
-void welcome();
-}
+
+void init();
+void loop();
+
+} // namespace ui

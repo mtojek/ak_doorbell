@@ -6,9 +6,9 @@ constexpr int kPwmChannel = 0;
 constexpr int kPwmPeriod = 65536;
 constexpr int kPwmDuty = 65536;
 
-PWM pwm_display(kPwmChip, kPwmChannel);
-
 namespace display {
+
+static hw::PWM pwm_display(kPwmChip, kPwmChannel);
 
 bool init() {
   if (!pwm_display.export_if_needed()) {

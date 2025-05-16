@@ -5,6 +5,8 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
+namespace hw {
+
 bool write_to_file(const std::string &path, const std::string &value) {
   std::ofstream fs(path);
   if (!fs.is_open())
@@ -51,3 +53,5 @@ bool PWM::set_duty(int duty_ns) {
 bool PWM::set_duty_and_period(int duty_ns, int period_ns) {
   return set_period(period_ns) && set_duty(duty_ns);
 }
+
+} // namespace hw

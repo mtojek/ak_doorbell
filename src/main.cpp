@@ -21,8 +21,8 @@ int main() {
   log::info("main", "Start application");
 
   lv_port_init();
-  lv_demo_widgets();
-  // ui::welcome();
+  // lv_demo_widgets();
+  ui::init();
 
   display::init();
   std::signal(SIGINT, on_signal);
@@ -30,8 +30,10 @@ int main() {
   display::enable(true);
 
   while (app_running) {
-    lv_tick_inc(5);
+    ui::loop();
     lv_task_handler();
+
+    lv_tick_inc(5);
     usleep(5000); // FIXME ak_sdk_init + ak_sleep_ms
   }
 
