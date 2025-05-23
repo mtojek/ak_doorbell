@@ -6,16 +6,23 @@ const char *ClockScreen::get_name() { return "Clock"; }
 
 void ClockScreen::on_create(lv_obj_t *parent) {
   lv_obj_t *scr = parent;
+  lv_theme_t *th = lv_theme_get_act();
 
-  // Zegar
-  lv_obj_t *labelTime = lv_label_create(scr, NULL);
-  lv_label_set_text(labelTime, "12:34");
-  lv_obj_align(labelTime, NULL, LV_ALIGN_IN_TOP_MID, 0, 20);
+  // Clock
+  static lv_style_t style_title;
+  lv_style_init(&style_title);
+  lv_style_set_text_font(&style_title, LV_STATE_DEFAULT,
+                         &lv_font_montserrat_192);
+
+  lv_obj_t *label_time = lv_label_create(scr, NULL);
+  lv_label_set_text(label_time, "21:34");
+  lv_obj_add_style(label_time, LV_OBJ_PART_MAIN, &style_title);
+  lv_obj_align(label_time, NULL, LV_ALIGN_IN_TOP_MID, 0, 40);
 
   // Data
   lv_obj_t *labelDate = lv_label_create(scr, NULL);
   lv_label_set_text(labelDate, "Sobota, 3 Maja 2025");
-  lv_obj_align(labelDate, NULL, LV_ALIGN_IN_TOP_MID, 0, 50);
+  lv_obj_align(labelDate, NULL, LV_ALIGN_IN_TOP_MID, 0, 100);
 
   // Ikona wyciszenia (🔕)
   lv_obj_t *muteIcon = lv_label_create(scr, NULL);

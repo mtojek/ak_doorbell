@@ -61,6 +61,7 @@ FetchContent_MakeAvailable(lv_examples)
 file(GLOB_RECURSE PROJECT_SOURCES
     src/*.cpp
     src/lv_port/*.cpp
+    src/lv_port/fonts/*.c
     src/log/*.cpp
     src/hw/*.cpp
     src/ui/*.cpp

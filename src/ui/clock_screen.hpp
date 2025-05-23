@@ -7,6 +7,9 @@
 namespace ui {
 
 class ClockScreen : public Screen {
+private:
+  lv_obj_t *labelTime;
+
 public:
   void on_create(lv_obj_t *parent) override;
   void on_loop() override;
