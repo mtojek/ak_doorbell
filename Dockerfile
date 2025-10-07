@@ -2,9 +2,7 @@ FROM --platform=linux/amd64 ubuntu:22.04@sha256:67cadaff1dca187079fce41360d5a7eb
 
 # Install dependencies
 RUN dpkg --add-architecture i386
-RUN apt-get update
-
-RUN apt-get install -y \
+RUN apt update && apt install -y \
     build-essential \
     cmake \
     git \
@@ -16,9 +14,12 @@ RUN apt-get install -y \
     libinput-dev \
     bzip2 \
     file \
-    vim
+    vim \
+    gdb \
+    gdb-multiarch \
+    qemu-user
 
-RUN apt-get install -y \
+RUN apt install -y \
     libstdc++6:i386 \
     lib32stdc++6 \
     libmpc-dev:i386 \
@@ -40,6 +41,10 @@ ENV PATH="${TOOLCHAIN_ROOT}/bin:${PATH}"
 
 # Set working directory where project will be mounted at runtime
 WORKDIR /app
+
+# Expose ports
+# gdbserver:
+EXPOSE 1234
 
 # Default command
 CMD [ "bash" ]
