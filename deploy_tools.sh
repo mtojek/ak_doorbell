@@ -17,19 +17,17 @@ REMOTE_PASS=${3:-}
 curl -T toolchain/${GDB_ARCHIVE} ftp://${REMOTE_HOST}/tmp/ --user "${REMOTE_USER}:${REMOTE_PASS}"
 
 expect <<EOF
-set timeout 10
+set timeout 30
 spawn telnet ${REMOTE_HOST}
 expect "anyka login:"
 send "${REMOTE_USER}\r"
 expect {
   "Password:" {
-    send "\r"
+    send "${REMOTE_PASS}\r"
     exp_continue
   }
   "${REMOTE_USER}@" {
-    send "ls\r"
-    expect "${REMOTE_USER}@"
-    send "mkdir -p ${GDB_DIR} && tar xvzf /tmp/${GDB_ARCHIVE} -C ${GDB_DIR} && rm -f /tmp/${GDB_ARCHIVE} \r"
+    send "mkdir -p ${GDB_DIR} && tar xvzf /tmp/${GDB_ARCHIVE} -C ${GDB_DIR} && rm -f /tmp/${GDB_ARCHIVE} && echo done \r"
     expect "done"
     send "exit\r"
   }
