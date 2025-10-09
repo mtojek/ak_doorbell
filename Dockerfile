@@ -14,10 +14,7 @@ RUN apt update && apt install -y \
     libinput-dev \
     bzip2 \
     file \
-    vim \
-    gdb \
-    gdb-multiarch \
-    qemu-user
+    vim
 
 RUN apt install -y \
     libstdc++6:i386 \
@@ -41,10 +38,6 @@ ENV PATH="${TOOLCHAIN_ROOT}/bin:${PATH}"
 
 # Set working directory where project will be mounted at runtime
 WORKDIR /app
-
-# Expose ports
-# gdbserver:
-EXPOSE 1234
 
 # Default command
 CMD [ "bash" ]
